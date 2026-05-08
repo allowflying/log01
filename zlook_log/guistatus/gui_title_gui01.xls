@@ -1,0 +1,51 @@
+GUI01	GUI001
+功能代码	功能文本	图标别名	图标文本	信息文本	字段名	功能键号	按钮数	菜单类型	功能文本编号	数据元素
+&IC1	选择	@16@			ICON_SELECT_DETAIL	02		X	001	
+&ILD	删除筛选	@GD@			ICON_FILTER_UNDO	38	11	X	001	
+&ILT	设置筛选	@4G@			ICON_FILTER	29	10	X	001	
+&INFO	信息	@0S@			ICON_INFORMATION	36	29	X	001	
+&MAX	最大							X	001	
+&MIN	最小值							X	001	
+&OAD	选择...							X	001	
+&OAD	选择格式...	@DM@			ICON_ALV_VARIANT_CHOOSE	33	26	X	002	
+&ODN	按降序排序	@3F@			ICON_SORT_DOWN	40	09	X	001	
+&OL0	更改格式...	@LZ@			ICON_ALV_VARIANTS	32	25	X	001	
+&OLX	更改...	@0R@			ICON_VARIANTS			X	001	
+&OPT	最佳宽度							X	001	
+&OUP	按升序排序	@3E@			ICON_SORT_UP	28	08	X	001	
+&REFRESH	刷新	@42@			ICON_REFRESH	08	03	X	001	
+&RNT	打印	@0X@			ICON_PRINT	86		X	001	
+&RNT_PREV	打印预览	@3G@			ICON_LAYOUT_CONTROL	46	16	X	001	
+&SAL	取消全选	@4D@			ICON_DESELECT_ALL	06	06	X	001	
+&SUM	小计...	@5V@			ICON_INTERMEDIATE_SUM	42	14	X	001	
+&UMC	总计	@3Z@			ICON_SUM	30	13	X	001	
+&VEXCEL	Microsoft Excel	@J2@			ICON_XLS	43	18	X	001	
+&VGRID	SAP 清单浏览器							X	001	
+&VLOTUS	Lotus 1-2-3							X	001	
+&XINT	SAP 查询的附加功能							X	001	
+&XXL	电子表格...	@DJ@			ICON_XXL			X	001	
+&GRAPH	图形	@0N@			ICON_GRAPHICS	47	23	X	001	
+%ML	文件夹							X	001	
+%PC	本地文件...	@49@			ICON_EXPORT	45	20	X	001	
+%SC	查找	@13@			ICON_SEARCH	71		X	001	
+%SC+	查找下一个	@4E@			ICON_SEARCH_NEXT	84			001	
+%SL	邮件收件人	@1S@			ICON_MAIL	31	21	X	001	
+&ABC	ABC 分析	@DL@			ICON_ABC	25	22	X	001	
+&ALL	全选	@4B@			ICON_SELECT_ALL	05	05	X	001	
+&AQW	文字处理...	@DK@			ICON_WORD_PROCESSING	44	19	X	001	
+&AUF	定义总计细分...							X	001	
+&AVE	保存...							X	001	
+&AVE	保存格式...	@DN@			ICON_ALV_VARIANT_SAVE	34	27	X	002	
+&AVR	平均值							X	001	
+&CDF	解冻列							X	001	
+&CFI	冻结至列							X	001	
+&COUNT	计数							X	001	
+&DATA_SAVE	保存	@2L@			ICON_SYSTEM_SAVE	11		X	001	
+&EB9	调用报表...	@36@			ICON_TABLE_SETTINGS	37	02	X	001	
+&ELP	帮助	@35@			ICON_SYSTEM_HELP	01		X	001	
+&ERW	管理...							X	001	
+&ETA	明细	@16@			ICON_SELECT_DETAIL	39	01	X	001	
+&F03	返回					03		X	001	
+&F12	取消	@0W@			ICON_CANCEL	12		X	001	
+&F15	退出					15		X	001	
+&F4	可能的条目					04		X	001	

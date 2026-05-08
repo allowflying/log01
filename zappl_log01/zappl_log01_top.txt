@@ -1,0 +1,57 @@
+*&---------------------------------------------------------------------*
+*&  包括                ZAPPL_LOG01_TOP
+*&---------------------------------------------------------------------*
+*----------------------------------------------------------------*
+
+TABLES:sscrfields .
+TABLES: sflight , zappl_log01.
+TYPE-POOLS : slis ,icon,vrm.
+
+TYPES:BEGIN OF ty_zappl_log01.
+        INCLUDE STRUCTURE  zappl_log01.
+TYPES:  handle TYPE i,         "下拉列表分组
+       END OF ty_zappl_log01 .
+
+DATA:gt_alv     TYPE TABLE OF ty_zappl_log01,
+     gs_alv     TYPE ty_zappl_log01,
+     gt_alv_old TYPE TABLE OF ty_zappl_log01,
+     gs_alv_old TYPE ty_zappl_log01.
+
+DATA:gv_structure_name TYPE tabname VALUE 'ZAPPL_LOG01'.
+
+DATA: gr_alv       TYPE REF TO cl_salv_table,
+      gr_functions TYPE REF TO cl_salv_functions_list.
+
+DATA: lr_layout TYPE REF TO cl_salv_layout,
+      ls_key    TYPE salv_s_layout_key.
+
+DATA: gs_dyntxt TYPE smp_dyntxt.
+
+DATA gv_rcomp  TYPE rcomp_d.
+
+FIELD-SYMBOLS: <fs_alv> TYPE ty_zappl_log01.
+
+DATA: gt_fieldcat TYPE lvc_t_fcat,
+      gs_fieldcat LIKE LINE OF gt_fieldcat,
+      is_layout   TYPE lvc_s_layo,
+      is_variant  TYPE disvariant.
+
+DATA:
+      gt_drop TYPE lvc_t_drop,   "下拉菜单的值表：分组：HANDLE 和 值 VALUES
+      gs_drop TYPE lvc_s_drop.
+
+DATA:
+      gt_events TYPE slis_t_event,  "ALV 事件表。
+      gs_events TYPE slis_alv_event. "ALV 事件工作区。
+
+**********************************************************************
+*               选择屏幕
+**********************************************************************
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
+
+SELECT-OPTIONS:s_carrid FOR sflight-carrid.
+
+SELECTION-SCREEN END OF BLOCK b1.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2026. Sap Release 701

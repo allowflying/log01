@@ -1,0 +1,155 @@
+**************************************************************************
+*   Method attributes.                                                   *
+**************************************************************************
+Instantiation: Public
+**************************************************************************
+
+METHOD create_appl_log.
+
+  DATA: lv_zdnzj  TYPE zclient VALUE IS INITIAL,
+        ls_header TYPE zlog_tab_h VALUE IS INITIAL,
+        ls_item   TYPE zlog_tab_p VALUE IS INITIAL,
+        lt_item   TYPE TABLE OF zlog_tab_p,
+        lt_field  TYPE TABLE OF zlog_tab_f,
+        ls_field  TYPE zlog_tab_f,
+        ls_tabix  TYPE zlog_s,
+        le_msg    TYPE REF TO cx_sy_assign_error .
+
+  DATA:lv_new_name TYPE c LENGTH 18,
+       lv_old_name TYPE c LENGTH 18,
+       lv_p TYPE c LENGTH 18,
+       lv_h TYPE c LENGTH 18 .
+
+  FIELD-SYMBOLS:<fs_old>   TYPE ANY,
+                <fs_new> TYPE ANY,
+                <fs_new_vlue> TYPE ANY,
+                <fs_old_vlue> TYPE ANY,
+                <fs_p> TYPE ANY,
+                <fs_h> TYPE ANY.
+
+
+  SELECT *
+    INTO TABLE lt_field
+    FROM zlog_tab_f
+   WHERE ztcode = sy-tcode .
+  SORT lt_field BY zflg .
+
+  IF lt_field IS NOT INITIAL.
+*Ì§Í·
+    CALL FUNCTION 'TH_USER_INFO'
+      EXPORTING
+        client   = sy-mandt
+        user     = sy-uname
+      IMPORTING
+        terminal = lv_zdnzj.
+
+    ls_header-zclient = lv_zdnzj.
+    ls_header-zdatum  = sy-datum.
+    ls_header-ztcode  = sy-tcode.
+    ls_header-zuname  = sy-uname.
+    ls_header-ztimlo  = sy-uzeit.
+
+**Ã÷Ï¸
+    LOOP AT it_tabix INTO ls_tabix.
+
+      MOVE-CORRESPONDING ls_header TO ls_item.
+      ls_item-zdatum = sy-datum.
+      ls_item-ztimlo = sy-uzeit.
+      ls_item-zdbname = ls_tabix-zdbname.
+      ls_item-zbutton = ls_tabix-zbutton.
+      ls_item-zrepid = ls_tabix-zrepid.
+      ls_item-zmsg = sy-uzeit.
+
+      LOOP AT lt_field INTO ls_field .
+
+        ls_item-zfield_name = ls_field-zfield_name.
+        TRY .
+            READ TABLE it_old ASSIGNING <fs_old> INDEX ls_tabix-zindex .
+            IF sy-subrc = 0.
+              CONCATENATE '<fs_old>-' ls_field-zfield_name INTO lv_old_name .
+              ASSIGN (lv_old_name) TO <fs_old_vlue>.
+
+              CONCATENATE '<fs_old>-' ls_field-zfield_name INTO lv_h .
+              ASSIGN (lv_h) TO <fs_h>.
+            ENDIF.
+
+            READ TABLE it_new ASSIGNING <fs_new> INDEX ls_tabix-zindex.
+            IF sy-subrc = 0.
+              CONCATENATE '<fs_new>-' ls_field-zfield_name INTO lv_new_name .
+              ASSIGN (lv_new_name) TO <fs_new_vlue>.
+
+              CONCATENATE '<fs_new>-' ls_field-zfield_name INTO lv_p .
+              ASSIGN (lv_p) TO <fs_p>.
+            ENDIF.
+
+            CASE ls_field-zflg.
+              WHEN 'D'.
+                CLEAR ls_field.
+                CONTINUE.
+              WHEN 'H'.
+                IF <fs_h> IS NOT INITIAL.
+                  ls_item-znumber = <fs_h>.
+                ELSE.
+                  ls_item-znumber = <fs_p>.
+                ENDIF.
+              WHEN 'P'.
+                IF <fs_p> IS NOT INITIAL.
+                  ls_item-znum_p = <fs_p>.
+                ELSE.
+                  ls_item-znum_p = <fs_h>.
+                ENDIF.
+              WHEN 'U'.
+                IF <fs_new_vlue> = <fs_old_vlue>.
+                  CONTINUE.
+                ENDIF.
+
+                CALL METHOD cl_fdt_uuid=>get_uuid
+                  EXPORTING
+                    iv_id_compliant = abap_false
+                  RECEIVING
+                    rv_uuid         = ls_item-zuuid.
+
+                ls_item-zold_vlue = <fs_old_vlue>.
+                ls_item-znew_vlue = <fs_new_vlue>.
+                CONDENSE ls_item-zold_vlue NO-GAPS .
+                CONDENSE ls_item-znew_vlue NO-GAPS .
+
+                APPEND ls_item TO  lt_item  .
+              WHEN OTHERS.
+            ENDCASE.
+
+          CATCH cx_sy_assign_error  INTO le_msg.
+
+            CALL METHOD cl_fdt_uuid=>get_uuid
+              EXPORTING
+                iv_id_compliant = abap_false
+              RECEIVING
+                rv_uuid         = ls_item-zuuid.
+            ls_item-zmsg = le_msg->get_text( ) .
+            APPEND ls_item TO  lt_item  .
+
+        ENDTRY.
+        CLEAR ls_field.
+      ENDLOOP.
+      CLEAR ls_item.
+    ENDLOOP.
+
+    IF lt_item IS NOT INITIAL AND ls_header IS NOT INITIAL.
+      MODIFY zlog_tab_h FROM ls_header.
+      MODIFY zlog_tab_p FROM TABLE lt_item.
+      IF sy-subrc = 0.
+        return = 'X'.
+      ELSE.
+        return = ''.
+        ROLLBACK WORK.
+      ENDIF.
+    ENDIF.
+    CLEAR: lt_item.
+  ELSE.
+    return = ''.
+  ENDIF.
+
+ENDMETHOD.
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2026. Sap Release 701

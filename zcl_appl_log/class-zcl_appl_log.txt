@@ -1,0 +1,52 @@
+**************************************************************************
+*   Class attributes.                                                    *
+**************************************************************************
+Instantiation: Public
+Message class:
+State: Implemented
+Final Indicator: X
+R/3 Release: 701
+
+**************************************************************************
+*   Public section of class.                                             *
+**************************************************************************
+class ZCL_APPL_LOG definition
+  public
+  final
+  create public .
+
+*"* public components of class ZCL_APPL_LOG
+*"* do not include other source files here!!
+public section.
+
+  methods CREATE_APPL_LOG
+    importing
+      IT_OLD type STANDARD TABLE
+      IT_NEW type STANDARD TABLE
+      IT_TABIX type STANDARD TABLE
+    exporting
+      value(RETURN) type C .
+
+**************************************************************************
+*   Private section of class.                                            *
+**************************************************************************
+*"* private components of class ZCL_APPL_LOG
+*"* do not include other source files here!!
+private section.
+
+**************************************************************************
+*   Protected section of class.                                          *
+**************************************************************************
+*"* protected components of class ZCL_APPL_LOG
+*"* do not include other source files here!!
+protected section.
+
+**************************************************************************
+*   Types section of class.                                              *
+**************************************************************************
+*"* dummy include to reduce generation dependencies between
+*"* class ZCL_APPL_LOG and it's users.
+*"* touched if any type reference has been changed
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2026. Sap Release 701

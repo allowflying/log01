@@ -1,0 +1,5 @@
+ZAPPL_LOG01 demo
+
+ZLOOK_LOG 查看demo中修改后的日志
+
+ZCL_APPL_LOG 创建日志.

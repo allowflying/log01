@@ -1,0 +1,98 @@
+*&---------------------------------------------------------------------*
+*&  包括                ZAPPL_LOG01_F01
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Form  FRM_GET_DATA
+*&---------------------------------------------------------------------*
+*       text 获取数据
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM frm_get_data .
+
+  CLEAR gt_alv .
+  SELECT
+  sflight~carrid
+  sflight~connid
+  sflight~fldate
+  sflight~price
+  sflight~paymentsum
+  sflight~planetype
+  saplane~seatsmax
+  saplane~consum
+  saplane~con_unit
+  saplane~tankcap
+  saplane~weight
+  saplane~leng
+  saplane~op_speed
+  saplane~producer
+  saplane~seatsmax_b
+  saplane~seatsmax_f
+  INTO CORRESPONDING FIELDS OF TABLE gt_alv
+  FROM sflight
+  INNER JOIN saplane ON sflight~planetype = saplane~planetype
+  WHERE sflight~carrid IN s_carrid .
+
+*  SELECT *
+*  INTO CORRESPONDING FIELDS OF TABLE gt_alv
+*  FROM zdvsflight
+*  WHERE carrid IN s_carrid .
+*  SORT gt_alv.
+
+ENDFORM.                    "frm_get_data
+*&---------------------------------------------------------------------*
+*&      Form  FRM_PROCESS_DATA
+*&---------------------------------------------------------------------*
+*       text  处理数据
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM frm_process_data .
+
+  gt_alv_old[] = gt_alv[] .
+
+ENDFORM.                    "frm_process_data                  "frm_down
+*&---------------------------------------------------------------------*
+*&      Form  FRM_APPL_LOG
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM 1421_frm_appl_log .
+
+  DATA:lt_log TYPE TABLE OF zlog_s,
+        ls_log TYPE zlog_s VALUE IS INITIAL,
+        lv_return TYPE c LENGTH 1 VALUE IS INITIAL .
+
+  LOOP AT gt_alv INTO gs_alv WHERE sel = 'X'.
+    ls_log-zrepid = 'ZAPPL_LOG01'.
+    ls_log-zdbname = ''.
+    ls_log-zindex = sy-tabix.
+    APPEND ls_log TO lt_log.
+
+  ENDLOOP.
+
+  DATA lo_log TYPE REF TO zcl_appl_log.
+  CREATE OBJECT lo_log.
+
+  CALL METHOD lo_log->create_appl_log
+    EXPORTING
+      it_old   = gt_alv_old
+      it_new   = gt_alv
+      it_tabix = lt_log
+    IMPORTING
+      return   = lv_return.
+
+  IF lv_return = 'X'.
+    gt_alv_old[] = gt_alv[] .
+    MESSAGE '已保存!' TYPE 'S'.
+  ENDIF.
+
+ENDFORM.                    " FRM_APPL_LOG
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2026. Sap Release 701

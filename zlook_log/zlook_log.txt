@@ -1,0 +1,44 @@
+*&---------------------------------------------------------------------*
+*& Report  ZAPPL_LOG01
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT  zlook_log.
+
+INCLUDE zlook_log_top.
+INCLUDE zlook_log_f01.
+INCLUDE zlook_log_s01.
+
+START-OF-SELECTION.
+
+  PERFORM frm_get_data.
+  IF gt_alv IS NOT INITIAL.
+    PERFORM frm_process_data.
+    PERFORM pf_show_alv TABLES gt_alv.
+  ELSE.
+    MESSAGE '暂无数据!' TYPE 'S' DISPLAY LIKE 'E' .
+  ENDIF.
+
+*Text elements
+*----------------------------------------------------------
+* 001 请输入选择条件
+
+
+*Selection texts
+*----------------------------------------------------------
+* S_ZDATUM D       .
+* S_ZTCODE D       .
+* S_ZUNAME D       .
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: Hard coded
+*   暂无数据!
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2026. Sap Release 701

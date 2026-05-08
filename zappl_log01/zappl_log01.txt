@@ -1,0 +1,43 @@
+*&---------------------------------------------------------------------*
+*& Report  ZAPPL_LOG01
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT  zappl_log01.
+
+INCLUDE zappl_log01_top.
+INCLUDE zappl_log01_f01.
+INCLUDE zappl_log01_s01.
+
+START-OF-SELECTION.
+
+  PERFORM frm_get_data.
+  IF gt_alv IS NOT INITIAL.
+    PERFORM frm_process_data.
+
+    PERFORM 1000_pf_show_alv TABLES gt_alv.
+  ELSE.
+    MESSAGE '暂无数据!' TYPE 'S' DISPLAY LIKE 'E' .
+  ENDIF.
+
+*Text elements
+*----------------------------------------------------------
+* 001 请输入选择条件
+
+
+*Selection texts
+*----------------------------------------------------------
+* S_CARRID D       .
+
+
+*Messages
+*----------------------------------------------------------
+*
+* Message class: Hard coded
+*   已保存!
+
+----------------------------------------------------------------------------------
+Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2026. Sap Release 701
